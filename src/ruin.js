@@ -1,4 +1,4 @@
-export default class Ruin {
+class Ruin {
   constructor(el) {
     this.el = el;
     this.chars = '!<>-_\\/[]{}—=+*^?#________';
@@ -24,7 +24,7 @@ export default class Ruin {
           char = this.randomChar();
           this.queue[i].char = char;
         }
-        output += `<span class="dud">${char}</span>`;
+        output += `<span class="shift">${char}</span>`;
       } else {
         output += from;
       }
@@ -55,8 +55,30 @@ export default class Ruin {
     }
 
     window.cancelAnimationFrame(this.frameRequest);
-    this.frameRequest = 0;
+    this.frame = 0;
     this.update();
     return promise;
   }
+
+  run(phrases, index = 0) {
+    this.setText(phrases[index]).then(() => {
+      const next = (index + 1) % phrases.length;
+      setTimeout(this.run.bind(this, phrases, next), 800);
+    });
+  }
 }
+
+const lines = [
+  'Neo,',
+  'sooner or later',
+  'you\'re going to realize',
+  'just as I did',
+  'that there\'s a difference',
+  'between knowing the path',
+  'and walking the path',
+];
+
+const element = document.querySelector('.text');
+const fx = new Ruin(element);
+
+fx.run(lines);

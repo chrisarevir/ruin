@@ -1,43 +1,19 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.ruin = factory());
-}(this, (function () { 'use strict';
+'use strict';
 
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-var Ruin$1 = function () {
+var Ruin = function () {
   function Ruin(el) {
-    classCallCheck(this, Ruin);
+    _classCallCheck(this, Ruin);
 
     this.el = el;
     this.chars = '!<>-_\\/[]{}—=+*^?#________';
     this.update = this.update.bind(this);
   }
 
-  createClass(Ruin, [{
+  _createClass(Ruin, [{
     key: 'randomChar',
     value: function randomChar() {
       return this.chars[Math.floor(Math.random() * this.chars.length)];
@@ -64,7 +40,7 @@ var Ruin$1 = function () {
             char = this.randomChar();
             this.queue[i].char = char;
           }
-          output += '<span class="dud">' + char + '</span>';
+          output += '<span class="shift">' + char + '</span>';
         } else {
           output += from;
         }
@@ -100,30 +76,30 @@ var Ruin$1 = function () {
       }
 
       window.cancelAnimationFrame(this.frameRequest);
-      this.frameRequest = 0;
+      this.frame = 0;
       this.update();
       return promise;
     }
+  }, {
+    key: 'run',
+    value: function run(phrases) {
+      var _this2 = this;
+
+      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+      this.setText(phrases[index]).then(function () {
+        var next = (index + 1) % phrases.length;
+        setTimeout(_this2.run.bind(_this2, phrases, next), 800);
+      });
+    }
   }]);
+
   return Ruin;
 }();
 
-var phrases = ['Neo,', 'sooner or later', 'you\'re going to realize', 'just as I did', 'that there\'s a difference', 'between knowing the path', 'and walking the path'];
+var lines = ['Neo,', 'sooner or later', 'you\'re going to realize', 'just as I did', 'that there\'s a difference', 'between knowing the path', 'and walking the path'];
 
-var el = document.querySelector('.text');
-var fx = new Ruin$1(el);
+var element = document.querySelector('.text');
+var fx = new Ruin(element);
 
-var counter = 0;
-var next = function next() {
-  fx.setText(phrases[counter]).then(function () {
-    setTimeout(next, 800);
-  });
-  counter = (counter + 1) % phrases.length;
-};
-
-next();
-
-return Ruin$1;
-
-})));
-//# sourceMappingURL=index.js.map
+fx.run(lines);
