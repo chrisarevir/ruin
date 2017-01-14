@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "babel src/ruin.js -o index.js"
+    "dev": "babel src/ruin.js -o index.js --watch"
   },
   "repository": {
     "type": "git",
